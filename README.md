@@ -1,17 +1,18 @@
 # Base85
-Base85 (Adobe) encode or decode standard input, to standard output.
+Base85 (Ascii85 with Adobe-Escape) encode or decode standard input, to standard output.
 
 ## Usage
 ### CLI
+**⚠️ Binary input/output is not supported.**  
 - Use Deno
   ```bash
-  $ deno install --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.3/cli.ts
+  $ deno install --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.4/cli.ts
   $ base85 -V
   ```
 - Download Binary
   ```bash
   # Linux_x86
-  $ curl -sL https://github.com/redpeacock78/base85/releases/download/v0.0.3/base85-linux-x86 -o /usr/local/bin/base85
+  $ curl -sL https://github.com/redpeacock78/base85/releases/download/v0.0.4/base85-linux-x86 -o /usr/local/bin/base85
   $ chmod +x /usr/local/bin/base85
   $ base85 -V
   ```
@@ -30,8 +31,9 @@ Base85 (Adobe) encode or decode standard input, to standard output.
   Ascii85は、Base85とも称され、Paul E.Rutterにより開発されたバイナリデータを文字列に変換する手法の一種である。4バイトのバイナリデータを符号化し5文字のASCIIコードを用いて文字を表す手法であるため、バイナリデータをAscii85で表す場合はデータ長が5/4に増加する。データ長が4/3になるuuencodeやBase64に比べ効率的である。現代では主にAdobeのPostScriptやPortable Document Formatファイル内で用いられている。
   ```
 ### Deno module
+**⚠️ Binary input is not supported.**
 ```typescript
-import { base85encode, base85decode } from "https://github.com/redpeacock78/base85/raw/v0.0.3/mod.ts";
+import { base85encode, base85decode } from "https://github.com/redpeacock78/base85/raw/v0.0.4/mod.ts";
 
 console.log(base85encode("Hello World."));
 await Deno.stdout.write(base85decode('<~87cURD]i,"Ebo8=zz~>'));
