@@ -13,7 +13,7 @@ try {
   const { options, args } = await new Command()
     .name("base85")
     .description("** Binary input/output is not supported. **\nBase85 (Ascii85 with Adobe-Escape) encode or decode standard input, to standard output.")
-    .version("0.0.4")
+    .version("0.0.5")
     .option("-d, --decode", "decode data")
     .arguments("<option>")
     .parse(isatty ? Deno.args : [...Deno.args, stdin!]);
