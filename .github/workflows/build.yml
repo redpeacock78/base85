@@ -19,7 +19,7 @@ jobs:
         run: |
           echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
           deno compile --target x86_64-unknown-linux-gnu --output base86-linux-x86 cli.ts
-          deno compile --target x86_64-pc-windows-msvc --output base86-windows-x86.exe cli.ts
+          deno compile --target x86_64-pc-windows-msvc --output base86-windows-x86 cli.ts
           deno compile --target x86_64-apple-darwin --output base86-macos-x86 cli.ts
           deno compile --target aarch64-apple-darwin --output base86-macos-arm cli.ts
       - name: Create Release
@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ env.TAG }}
-          release_name: Release ${{ env.TAG }}
+          release_name: ${{ env.TAG }}
           draft: false
           prerelease: false
       - name: Upload Release
