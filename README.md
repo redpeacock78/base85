@@ -6,13 +6,13 @@ Base85 (Ascii85 with Adobe-Escape) encode or decode standard input, to standard 
 **⚠️ Binary input/output is not supported.**  
 - Use Deno
   ```bash
-  $ deno install --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.4/cli.ts
+  $ deno install --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.5/cli.ts
   $ base85 -V
   ```
 - Download Binary
   ```bash
   # Linux_x86
-  $ curl -sL https://github.com/redpeacock78/base85/releases/download/v0.0.4/base85-linux-x86 -o /usr/local/bin/base85
+  $ curl -sL https://github.com/redpeacock78/base85/releases/download/v0.0.5/base85-linux-x86 -o /usr/local/bin/base85
   $ chmod +x /usr/local/bin/base85
   $ base85 -V
   ```
@@ -33,7 +33,7 @@ Base85 (Ascii85 with Adobe-Escape) encode or decode standard input, to standard 
 ### Deno module
 **⚠️ Binary input is not supported.**
 ```typescript
-import { base85encode, base85decode } from "https://github.com/redpeacock78/base85/raw/v0.0.4/mod.ts";
+import { base85encode, base85decode } from "https://github.com/redpeacock78/base85/raw/v0.0.5/mod.ts";
 
 console.log(base85encode("Hello World."));
 await Deno.stdout.write(base85decode('<~87cURD]i,"Ebo8=zz~>'));
