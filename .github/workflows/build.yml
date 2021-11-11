@@ -18,10 +18,10 @@ jobs:
       - name: Set Tag and Compile
         run: |
           echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
-          deno compile --target x86_64-unknown-linux-gnu --output base86-linux-x86 cli.ts
-          deno compile --target x86_64-pc-windows-msvc --output base86-windows-x86 cli.ts
-          deno compile --target x86_64-apple-darwin --output base86-macos-x86 cli.ts
-          deno compile --target aarch64-apple-darwin --output base86-macos-arm cli.ts
+          deno compile --target x86_64-unknown-linux-gnu --output base85-linux-x86 cli.ts
+          deno compile --target x86_64-pc-windows-msvc --output base85-windows-x86 cli.ts
+          deno compile --target x86_64-apple-darwin --output base85-macos-x86 cli.ts
+          deno compile --target aarch64-apple-darwin --output base85-macos-arm cli.ts
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
@@ -36,4 +36,4 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: "base86-*"
+          asset_path: "base85-*"
