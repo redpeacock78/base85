@@ -15,7 +15,7 @@ try {
   const { options, args } = await new Command()
     .name("base85")
     .description("Base85 (Adobe) encode or decode standard input, to standard output.")
-    .version("0.0.1")
+    .version("0.0.2")
     .option("-d, --decode", "decode data")
     .arguments("<option>")
     .parse(isatty ? Deno.args : [...Deno.args, stdin.join("\n")]);
