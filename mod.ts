@@ -26,8 +26,8 @@ export function base85encode(str: string): string {
 }
 
 // Base85 Decode
-export function base85decode(str: string): string {
-  const replaced: string = str.replace(/^<~/g, "").replace(/~>$/g, "").replace(/z/g, "!!!!!");
+export function base85decode(str: string): Uint8Array {
+  const replaced: string = str.replace(/\n$/g, "").replace(/^<~/g, "").replace(/~>$/g, "").replace(/z/g, "!!!!!");
   const n: number = 5;
   const mod: number = replaced.length % n;
   const diff: number = n - mod;
@@ -62,5 +62,5 @@ export function base85decode(str: string): string {
       ascii_arr.pop();
     }
   }
-  return new TextDecoder().decode(new Uint8Array(ascii_arr));
+  return new Uint8Array(ascii_arr);
 }
