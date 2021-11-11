@@ -42,18 +42,21 @@ export function base85decode(str: string): string {
     replaced_arr = padd_replaced.match(/.{5}/g)!;
   }
   const ascii_arr: number[] = replaced_arr
-    .map((i: string): number[] =>
-      i
-        .match(/./g)!
-        .map((j: string): number => j!.charCodeAt(0) - 33)
-        .map((k: number, i: number): number => (i === 4 ? k : k * 85 ** (4 - i)))
-        .reduce((sum: number, elm: number): number => sum + elm + 0)
-        .toString(2)
-        .padStart(32, "0")
-        .match(/.{8}/g)!
-        .map((i: string): number => parseInt(i, 2))
-    )
-    .flat();
+    .map((i: string): number[] | undefined => {
+      if (i !== "!!!!!") {
+        return i
+          .match(/./g)!
+          .map((j: string): number => j!.charCodeAt(0) - 33)
+          .map((k: number, i: number): number => (i === 4 ? k : k * 85 ** (4 - i)))
+          .reduce((sum: number, elm: number): number => sum + elm + 0)
+          .toString(2)
+          .padStart(32, "0")
+          .match(/.{8}/g)!
+          .map((i: string): number => parseInt(i, 2));
+      }
+    })
+    .filter(Boolean)
+    .flat() as number[];
   if (mod !== 0) {
     for (let i: number = 0; i < diff; i++) {
       ascii_arr.pop();
