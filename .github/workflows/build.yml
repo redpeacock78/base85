@@ -2,8 +2,6 @@ name: Release
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "v[0-9]+\\.[0-9]+\\.[0-9]+"
 
@@ -22,7 +20,7 @@ jobs:
           echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
           deno compile --target x86_64-unknown-linux-gnu --output base86-linux-x86 cli.ts
           deno compile --target x86_64-pc-windows-msvc --output base86-windows-x86.exe cli.ts
-          deno compile --target x86_64-apple-darwin- -output base86-macos-x86 cli.ts
+          deno compile --target x86_64-apple-darwin --output base86-macos-x86 cli.ts
           deno compile --target aarch64-apple-darwin --output base86-macos-arm cli.ts
       - name: Create Release
         id: create_release
