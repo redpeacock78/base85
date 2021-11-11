@@ -27,40 +27,44 @@ export function base85encode(str: string): string {
 
 // Base85 Decode
 export function base85decode(str: string): Uint8Array {
-  const replaced: string = str.replace(/\n$/g, "").replace(/^<~/g, "").replace(/~>$/g, "").replace(/z/g, "!!!!!");
-  const n: number = 5;
-  const mod: number = replaced.length % n;
-  const diff: number = n - mod;
-  let replaced_arr: string[];
-  if (mod === 0) {
-    replaced_arr = replaced.match(/.{5}/g)!;
-  } else {
-    let padd_replaced = replaced;
-    for (let i: number = 0; i < diff; i++) {
-      padd_replaced = `${padd_replaced}u`;
-    }
-    replaced_arr = padd_replaced.match(/.{5}/g)!;
-  }
-  const ascii_arr: number[] = replaced_arr
-    .map((i: string): number[] | undefined => {
-      if (i !== "!!!!!") {
-        return i
-          .match(/./g)!
-          .map((j: string): number => j!.charCodeAt(0) - 33)
-          .map((k: number, i: number): number => (i === 4 ? k : k * 85 ** (4 - i)))
-          .reduce((sum: number, elm: number): number => sum + elm + 0)
-          .toString(2)
-          .padStart(32, "0")
-          .match(/.{8}/g)!
-          .map((i: string): number => parseInt(i, 2));
+  if (str.match(/^<~/) && str.replace(/\n$/g, "").match(/~>$/)) {
+    const replaced: string = str.replace(/\n$/g, "").replace(/^<~/g, "").replace(/~>$/g, "").replace(/z/g, "!!!!!");
+    const n: number = 5;
+    const mod: number = replaced.length % n;
+    const diff: number = n - mod;
+    let replaced_arr: string[];
+    if (mod === 0) {
+      replaced_arr = replaced.match(/.{5}/g)!;
+    } else {
+      let padd_replaced = replaced;
+      for (let i: number = 0; i < diff; i++) {
+        padd_replaced = `${padd_replaced}u`;
       }
-    })
-    .filter(Boolean)
-    .flat() as number[];
-  if (mod !== 0) {
-    for (let i: number = 0; i < diff; i++) {
-      ascii_arr.pop();
+      replaced_arr = padd_replaced.match(/.{5}/g)!;
     }
+    const ascii_arr: number[] = replaced_arr
+      .map((i: string): number[] | undefined => {
+        if (i !== "!!!!!") {
+          return i
+            .match(/./g)!
+            .map((j: string): number => j!.charCodeAt(0) - 33)
+            .map((k: number, i: number): number => (i === 4 ? k : k * 85 ** (4 - i)))
+            .reduce((sum: number, elm: number): number => sum + elm + 0)
+            .toString(2)
+            .padStart(32, "0")
+            .match(/.{8}/g)!
+            .map((i: string): number => parseInt(i, 2));
+        }
+      })
+      .filter(Boolean)
+      .flat() as number[];
+    if (mod !== 0) {
+      for (let i: number = 0; i < diff; i++) {
+        ascii_arr.pop();
+      }
+    }
+    return new Uint8Array(ascii_arr);
+  } else {
+    throw new Error("base86: invalid input");
   }
-  return new Uint8Array(ascii_arr);
 }
