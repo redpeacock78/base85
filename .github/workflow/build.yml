@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "v[0-9]+\\.[0-9]+\\.[0-9]+"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Set Tag and Compile
+        run: |
+          echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          deno compile --target x86_64-unknown-linux-gnu --output base86-linux-x86 cli.ts
+          deno compile --target x86_64-pc-windows-msvc --output base86-windows-x86.exe cli.ts
+          deno compile --target x86_64-apple-darwin- -output base86-macos-x86 cli.ts
+          deno compile --target aarch64-apple-darwin --output base86-macos-arm cli.ts
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG }}
+          release_name: Release ${{ env.TAG }}
+          draft: false
+          prerelease: false
+      - name: Upload Release
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: "base86-*"
