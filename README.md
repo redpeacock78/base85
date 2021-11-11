@@ -5,7 +5,7 @@ Base85 (Adobe) encode or decode standard input, to standard output.
 ### CLI
 - Use Deno
   ```bash
-  $ deno install --force https://github.com/redpeacock78/base85/raw/v0.0.1/cli.ts
+  $ deno install --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.1/cli.ts
   $ base85 -V
   ```
 - Download Binary
