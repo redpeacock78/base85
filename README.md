@@ -43,4 +43,4 @@ await Deno.stdout.write(base85decode('<~87cURD]i,"Ebo8=zz~>'));
 Please Create [Issues](https://github.com/redpeacock78/base85/issues/new), or Pull Requests.
 
 ## License
-This source code is licensed [MIT](https://github.com/redpeacock78/base85/blob/master/LICENCE).
+This source code is licensed [MIT](https://github.com/redpeacock78/base85/blob/master/LICENSE).
