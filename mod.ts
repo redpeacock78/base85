@@ -1,11 +1,11 @@
 // Base85 Encode
-export function base85encode(str: string): string {
-  const bit: string = [...str].map((i: string): string => [...new TextEncoder().encode(i)].map((u: number): string => u.toString(2).padStart(8, "0")).join("")).join("");
+export function base85encode(input: Uint8Array): string {
+  const bit: string = [...input].map((u: number): string => Number(u).toString(2).padStart(8, "0")).join("");
   const n: number = 32;
-  const bit_mod: number = bit.length % n;
-  const bit_diff: number = n - bit_mod;
+  const mod: number = bit.length % n;
+  const diff: number = n - mod;
   let padding_bit: string = bit;
-  for (let i: number = 0; i < bit_diff; i++) {
+  for (let i: number = 0; i < diff; i++) {
     padding_bit = `${padding_bit}00`;
   }
   const base: number[][] = padding_bit.match(/.{32}/g)!.map((i: string): number[] => {
@@ -22,13 +22,13 @@ export function base85encode(str: string): string {
     .flat()
     .map((i: number): string => String.fromCharCode(i + 33))
     .join("");
-  return result.match(/!!!!!/) ? `<~${result.replace(/!!!!!/g, "z")}~>` : `<~${result.slice(0, -(bit_diff / 8))}~>`;
+  return result.match(/!!!!!/) ? `<~${result.replace(/!!!!!/g, "z")}~>` : `<~${result.slice(0, -(diff / 8))}~>`;
 }
 
 // Base85 Decode
 export function base85decode(str: string): Uint8Array {
-  if (str.match(/^<~/) && str.replace(/\n$/g, "").match(/~>$/)) {
-    const replaced: string = str.replace(/\n$/g, "").replace(/^<~/g, "").replace(/~>$/g, "").replace(/z/g, "!!!!!");
+  if (str.match(/^<~/) && str.match(/~>$/)) {
+    const replaced: string = str.replace(/^<~/g, "").replace(/~>$/g, "").replace(/z/g, "!!!!!");
     const n: number = 5;
     const mod: number = replaced.length % n;
     const diff: number = n - mod;
