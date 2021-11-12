@@ -36,7 +36,7 @@ Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard i
 import { base85encode, base85decode } from "https://github.com/redpeacock78/base85/raw/v0.0.6/mod.ts";
 
 console.log(base85encode(new TextEncoder().encode("Hello World.")));
-await Deno.stdout.write(base85decode('<~87cURD]i,"Ebo8=zz~>'));
+Deno.stdout.writeSync(base85decode('<~87cURD]i,"Ebo8=zz~>'));
 ```
 
 ## Contribution
