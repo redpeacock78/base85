@@ -1,3 +1,4 @@
+import { readAllSync } from "https://deno.land/std@0.114.0/streams/conversion.ts";
 import { getStdinBufferSync } from "https://deno.land/x/get_stdin@v1.1.0/mod.ts";
 import { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
 import { base85encode, base85decode } from "./mod.ts";
@@ -15,7 +16,7 @@ try {
     args_judge = Deno.args[0].match(/-d|--decode|-h|--help|-V|--version/) ? true : false;
     if (!args_judge) {
       try {
-        file = Deno.readAllSync(Deno.openSync(Deno.args[0]));
+        file = readAllSync(Deno.openSync(Deno.args[0]));
         Deno.close(Deno.openSync(Deno.args[0]).rid);
         filled = file.length !== 0 ? true : false;
       } catch {
@@ -23,7 +24,7 @@ try {
       }
     } else if (Deno.args[1]) {
       try {
-        file = Deno.readAllSync(Deno.openSync(Deno.args[1]));
+        file = readAllSync(Deno.openSync(Deno.args[1]));
         Deno.close(Deno.openSync(Deno.args[1]).rid);
         filled = file.length !== 0 ? true : false;
       } catch {
@@ -34,7 +35,7 @@ try {
   const { options, args } = await new Command()
     .name("base85")
     .description("Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard input, to standard output.")
-    .version("0.0.9")
+    .version("0.0.10")
     .option("-d, --decode", "Decode data")
     .arguments("<option>")
     .parse(!isatty ? [...Deno.args, [...stdin!].join(",")] : !file! ? Deno.args : !args_judge! ? [[...file!].join(",")] : [Deno.args[0], [...file!].join(",")]);
