@@ -6,21 +6,25 @@ try {
   let file: Uint8Array;
   let stdin: Uint8Array;
   let filled: boolean;
+  let args_judge: boolean;
   const isatty: boolean = Deno.isatty(Deno.stdin.rid);
   if (!isatty) {
     stdin = getStdinBufferSync({ exitOnEnter: false });
     filled = stdin.length !== 0 ? true : false;
   } else if (Deno.args[0] !== undefined) {
-    if (!Deno.args[0].match(/-d|--decode|-h|--help|-V|--version/)) {
+    args_judge = Deno.args[0].match(/-d|--decode|-h|--help|-V|--version/) ? true : false;
+    if (!args_judge) {
       try {
-        file = Deno.readFileSync(Deno.args[0]);
+        file = Deno.readAllSync(Deno.openSync(Deno.args[0]));
+        Deno.close(Deno.openSync(Deno.args[0]).rid);
         filled = file.length !== 0 ? true : false;
       } catch {
         throw new Error("base85: No such file or directory");
       }
     } else if (Deno.args[1]) {
       try {
-        file = Deno.readFileSync(Deno.args[1]);
+        file = Deno.readAllSync(Deno.openSync(Deno.args[1]));
+        Deno.close(Deno.openSync(Deno.args[1]).rid);
         filled = file.length !== 0 ? true : false;
       } catch {
         throw new Error("base85: No such file or directory");
@@ -30,15 +34,15 @@ try {
   const { options, args } = await new Command()
     .name("base85")
     .description("Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard input, to standard output.")
-    .version("0.0.8")
+    .version("0.0.9")
     .option("-d, --decode", "Decode data")
     .arguments("<option>")
-    .parse(!isatty ? [...Deno.args, [...stdin!].join(",")] : !file! ? Deno.args : !Deno.args[0].match(/-d|--decode|-h|--help|-V|--version/) ? [[...file!].join(",")] : [Deno.args[0], [...file!].join(",")]);
+    .parse(!isatty ? [...Deno.args, [...stdin!].join(",")] : !file! ? Deno.args : !args_judge! ? [[...file!].join(",")] : [Deno.args[0], [...file!].join(",")]);
   const { decode } = options;
   const runner: ((str: string) => Uint8Array) | ((byte: Uint8Array) => string) = decode ? base85decode : base85encode;
   const convert: () => void = (): void => {
     const args2Unit8Array: Uint8Array = new Uint8Array(args[0].split(","));
-    const input: Uint8Array | string = !decode ? args2Unit8Array : new TextDecoder().decode(args2Unit8Array).replace(/\n$/g, "");
+    const input: Uint8Array | string = decode ? new TextDecoder().decode(args2Unit8Array).replace(/\n$/g, "") : args2Unit8Array;
     const result: string | Uint8Array = runner(input! as Uint8Array & string);
     typeof result === "string" ? console.log(result) : Deno.stdout.writeSync(result);
   };
