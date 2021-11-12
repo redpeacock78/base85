@@ -7,7 +7,7 @@ Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard i
 **🎉 It can now also handle binaries!**  
 - Use Deno
   ```bash
-  $ deno install --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.8/cli.ts
+  $ deno install --allow-read --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.8/cli.ts
   $ base85 -V
   ```
 - Download Binary
