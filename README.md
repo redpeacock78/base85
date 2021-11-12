@@ -3,7 +3,8 @@ Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard i
 
 ## Usage
 ### CLI
-** 🎉 It can now also handle binaries! **
+
+**🎉 It can now also handle binaries!**  
 - Use Deno
   ```bash
   $ deno install --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.6/cli.ts
