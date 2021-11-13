@@ -35,7 +35,7 @@ try {
   const { options, args } = await new Command()
     .name("base85")
     .description("Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard input, to standard output.")
-    .version("0.0.10")
+    .version("v0.0.11")
     .option("-d, --decode", "Decode data")
     .arguments("<option>")
     .parse(!isatty ? [...Deno.args, [...stdin!].join(",")] : !file! ? Deno.args : !args_judge! ? [[...file!].join(",")] : [Deno.args[0], [...file!].join(",")]);
