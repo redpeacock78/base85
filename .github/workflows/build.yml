@@ -18,10 +18,10 @@ jobs:
       - name: Set Tag and Compile
         run: |
           echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
-          deno compile --allow-read --target x86_64-unknown-linux-gnu --output base85-linux-x86 cli.ts
-          deno compile --allow-read --target x86_64-pc-windows-msvc --output base85-windows-x86 cli.ts
-          deno compile --allow-read --target x86_64-apple-darwin --output base85-macos-x86 cli.ts
-          deno compile --allow-read --target aarch64-apple-darwin --output base85-macos-arm cli.ts
+          deno compile --allow-read --v8-flags=--max-old-space-size=8192 --target x86_64-unknown-linux-gnu --output base85-linux-x86 cli.ts
+          deno compile --allow-read --v8-flags=--max-old-space-size=8192 --target x86_64-pc-windows-msvc --output base85-windows-x86 cli.ts
+          deno compile --allow-read --v8-flags=--max-old-space-size=8192 --target x86_64-apple-darwin --output base85-macos-x86 cli.ts
+          deno compile --allow-read --v8-flags=--max-old-space-size=8192 --target aarch64-apple-darwin --output base85-macos-arm cli.ts
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
