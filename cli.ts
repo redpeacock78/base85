@@ -10,8 +10,29 @@ try {
   let args_judge: boolean;
   const isatty: boolean = Deno.isatty(Deno.stdin.rid);
   if (!isatty) {
-    stdin = getStdinBufferSync({ exitOnEnter: false });
-    filled = stdin.length !== 0 ? true : false;
+    const input = getStdinBufferSync({ exitOnEnter: false });
+    if (input.length !== 0) {
+      stdin = input;
+      filled = stdin.length! !== 0 ? true : false;
+    } else if (!Deno.args[0].match(/-d|--decode|-h|--help|-V|--version/)) {
+      try {
+        args_judge = true;
+        stdin = readAllSync(Deno.openSync(Deno.args[0]));
+        Deno.close(Deno.openSync(Deno.args[0]).rid);
+        filled = stdin.length !== 0 ? true : false;
+      } catch {
+        throw new Error("base85: No such file or directory");
+      }
+    } else if (Deno.args[1]) {
+      try {
+        args_judge = false;
+        stdin = readAllSync(Deno.openSync(Deno.args[1]));
+        Deno.close(Deno.openSync(Deno.args[1]).rid);
+        filled = stdin.length !== 0 ? true : false;
+      } catch {
+        throw new Error("base85: No such file or directory");
+      }
+    }
   } else if (Deno.args[0] !== undefined) {
     args_judge = Deno.args[0].match(/-d|--decode|-h|--help|-V|--version/) ? true : false;
     if (!args_judge) {
@@ -35,10 +56,10 @@ try {
   const { options, args } = await new Command()
     .name("base85")
     .description("Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard input, to standard output.")
-    .version("v0.0.11")
+    .version("v0.0.12")
     .option("-d, --decode", "Decode data")
     .arguments("<option>")
-    .parse(!isatty ? [...Deno.args, [...stdin!].join(",")] : !file! ? Deno.args : !args_judge! ? [[...file!].join(",")] : [Deno.args[0], [...file!].join(",")]);
+    .parse(!isatty ? (args_judge! ? [[...stdin!].join(",")] : [Deno.args[0], [...stdin!].join(",")].filter(Boolean)) : !file! ? Deno.args : !args_judge! ? [[...file!].join(",")] : [Deno.args[0], [...file!].join(",")]);
   const { decode } = options;
   const runner: ((str: string) => Uint8Array) | ((byte: Uint8Array) => string) = decode ? base85decode : base85encode;
   const convert: () => void = (): void => {
