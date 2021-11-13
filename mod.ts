@@ -5,8 +5,10 @@ export function base85encode(input: Uint8Array): string {
   const mod: number = bit.length % n;
   const diff: number = n - mod;
   let padding_bit: string = bit;
-  for (let i: number = 0; i < diff; i++) {
-    padding_bit = `${padding_bit}00`;
+  if (mod !== 0) {
+    for (let i: number = 0; i < diff; i++) {
+      padding_bit = `${padding_bit}00`;
+    }
   }
   const base: number[][] = padding_bit.match(/.{32}/g)!.map((i: string): number[] => {
     const con: number = 85;
@@ -22,7 +24,7 @@ export function base85encode(input: Uint8Array): string {
     .flat()
     .map((i: number): string => String.fromCharCode(i + 33))
     .join("");
-  return result.match(/!!!!!/) ? `<~${result.replace(/!!!!!/g, "z")}~>` : `<~${result.slice(0, -(diff / 8))}~>`;
+  return result.match(/!!!!!/) ? `<~${result.replace(/!!!!!/g, "z")}~>` : `<~${result}~>`;
 }
 
 // Base85 Decode
@@ -36,7 +38,7 @@ export function base85decode(str: string): Uint8Array {
     if (mod === 0) {
       replaced_arr = replaced.match(/.{5}/g)!;
     } else {
-      let padd_replaced = replaced;
+      let padd_replaced: string = replaced;
       for (let i: number = 0; i < diff; i++) {
         padd_replaced = `${padd_replaced}u`;
       }
