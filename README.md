@@ -12,8 +12,10 @@ Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard i
   ```
 - Download Binary
   ```bash
-  # Linux_x86
-  $ curl -sL https://github.com/redpeacock78/base85/releases/download/v0.0.12/base85-linux-x86 -o /usr/local/bin/base85
+  # Linux_x86(Latest)
+  # When you want to specify a version
+  # https://www.ghrl.tk/redpeacock78/base85[@tag]/base85-linux-x86
+  $ curl -sL https://www.ghrl.tk/redpeacock78/base85/base85-linux-x86 -o /usr/local/bin/base85
   $ chmod +x /usr/local/bin/base85
   $ base85 -V
   ```
