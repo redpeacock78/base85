@@ -3,10 +3,9 @@ export function base85encode(input: Uint8Array): string {
   const bit: string = [...input].map((u: number): string => Number(u).toString(2).padStart(8, "0")).join("");
   const n: number = 32;
   const mod: number = bit.length % n;
-  const diff: number = n - mod;
   let padding_bit: string = bit;
   if (mod !== 0) {
-    for (let i: number = 0; i < diff; i++) {
+    for (let i: number = 0; i < n - mod; i++) {
       padding_bit = `${padding_bit}00`;
     }
   }
@@ -23,8 +22,9 @@ export function base85encode(input: Uint8Array): string {
   const result: string = base
     .flat()
     .map((i: number): string => String.fromCharCode(i + 33))
-    .join("");
-  return result.match(/!!!!!/) ? `<~${result.replace(/!!!!!/g, "z")}~>` : `<~${result}~>`;
+    .join("")
+    .replace(/!!!!!/g, "z");
+  return `<~${result}~>`;
 }
 
 // Base85 Decode
@@ -48,8 +48,7 @@ export function base85decode(str: string): Uint8Array {
       .map((i: string): number[] => {
         return i
           .match(/./g)!
-          .map((j: string): number => j!.charCodeAt(0) - 33)
-          .map((k: number, i: number): number => (i === 4 ? k : k * 85 ** (4 - i)))
+          .map((i: string, n: number): number => (i!.charCodeAt(0) - 33) * 85 ** (4 - n))
           .reduce((sum: number, elm: number): number => sum + elm + 0)
           .toString(2)
           .padStart(32, "0")
