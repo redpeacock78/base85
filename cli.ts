@@ -2,6 +2,7 @@ import { readAllSync } from "https://deno.land/std@0.114.0/streams/conversion.ts
 import { getStdinBufferSync } from "https://deno.land/x/get_stdin@v1.1.0/mod.ts";
 import { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
 import { base85encode, base85decode } from "./mod.ts";
+import { version } from "./version.ts";
 
 try {
   let file: Uint8Array;
@@ -56,7 +57,7 @@ try {
   const { options, args } = await new Command()
     .name("base85")
     .description("Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard input, to standard output.")
-    .version("v0.0.12")
+    .version(version())
     .option("-d, --decode", "Decode data")
     .arguments("<option>")
     .parse(!isatty ? (args_judge! ? [[...stdin!].join(",")] : [Deno.args[0], [...stdin!].join(",")].filter(Boolean)) : !file! ? Deno.args : !args_judge! ? [[...file!].join(",")] : [Deno.args[0], [...file!].join(",")]);
