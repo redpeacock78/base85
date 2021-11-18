@@ -5,12 +5,12 @@ Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard i
 ### CLI
 
 **🎉 It can now also handle binaries!**  
-- Use Deno
+- Use Deno 🦕
   ```bash
-  $ deno install --allow-read --force -n base85 https://github.com/redpeacock78/base85/raw/v0.0.12/cli.ts
+  $ deno install -A -f -n base85 https://denopkg.com/redpeacock78/base85@latest/cli.ts
   $ base85 -V
   ```
-- Download Binary
+- Download Binary 📦
   ```bash
   # Linux_x86(Latest)
   # When you want to specify a version
@@ -35,7 +35,7 @@ Base85 (Ascii85 with Adobe Escape Sequence) encode or decode FILE, or standard i
   ```
 ### Deno module
 ```typescript
-import { base85encode, base85decode } from "https://github.com/redpeacock78/base85/raw/v0.0.12/mod.ts";
+import { base85encode, base85decode } from "https://denopkg.com/redpeacock78/base85@latest/mod.ts";
 
 console.log(base85encode(new TextEncoder().encode("Hello World.")));
 Deno.stdout.writeSync(base85decode('<~87cURD]i,"Ebo8=zz~>'));
