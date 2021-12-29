@@ -15,6 +15,9 @@ jobs:
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+      - name: Run Test
+        run: |
+          deno test
       - name: Set Tag and Compile
         run: |
           echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
@@ -22,6 +25,14 @@ jobs:
           deno compile --allow-read --v8-flags=--max-old-space-size=8192 --target x86_64-pc-windows-msvc --output base85-windows-x86 cli.ts
           deno compile --allow-read --v8-flags=--max-old-space-size=8192 --target x86_64-apple-darwin --output base85-macos-x86 cli.ts
           deno compile --allow-read --v8-flags=--max-old-space-size=8192 --target aarch64-apple-darwin --output base85-macos-arm cli.ts
+      - name: Get commit summary
+        id: get_commit_summary
+        run: |
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | sed -n 2p)
+          echo "PREVIOUS_TAG: $PREVIOUS_TAG"
+          COMMIT_SUMMARY="$(git log --oneline --pretty=tformat:"%h %s" $PREVIOUS_TAG..${{ github.ref }})"
+          COMMIT_SUMMARY="${COMMIT_SUMMARY//$'\n'/'%0A'}"
+          echo ::set-output name=COMMIT_SUMMARY::$COMMIT_SUMMARY
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
@@ -30,6 +41,8 @@ jobs:
         with:
           tag_name: ${{ env.TAG }}
           release_name: ${{ env.TAG }}
+          body: |
+            ${{ steps.get_commit_summary.outputs.COMMIT_SUMMARY }}
           draft: false
           prerelease: false
       - name: Upload Release
