@@ -29,7 +29,8 @@ export function base85encode(input: Uint8Array): string {
     .flat()
     .map((i: number): string => String.fromCharCode(i + 33))
     .join("")
-    .replace(/!!!!!/g, "z");
+    .replace(/!!!!!/g, "z")
+    .replace(/z+$/, "");
   return `<~${result}~>`;
 }
 
